@@ -12,15 +12,20 @@ int connectWifi(void){
     int ret;
     do{
         printf("Tentando conectar a Rede: %s\n");
-        ret = cyw43_arch_wifi_connect_timeout_ms(SSID, PASSWORD, CYW43_AUTH_WPA2_AES_PSK);
+        ret = cyw43_arch_wifi_connect_timeout_ms(SSID, PASSWORD, CYW43_AUTH_WPA2_AES_PSK, 30000);
+        if(ret != 0){
+            printf("Falha conexão wifi");
+            sleep_ms(5000);
+        }
     } while(ret != 0);
+
 
     printf("conectado com sucesso");
     gpio_put(LED_PIN, 1);
     return ret;
 }
 
-void monitorwifi(void){
+void monitoraWifi(void){
     while(true){
         if(netif_default == NULL || (netif_default->flags & NETIF_FLAG_LINK_UP)){
             printf("Conexão perdid, tentando reconectar");
@@ -45,7 +50,7 @@ int main()
     cyw43_arch_enable_sta_mode();
 
     connectWifi();
-    monitorwifi();
+    monitoraWifi();
 
     return 0;
 }
