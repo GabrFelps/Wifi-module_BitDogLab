@@ -21,10 +21,24 @@ int connectWifi(void){
 }
 
 void monitorwifi(void){
-    
+    while(true){
+        if(netif_default == NULL || (netif_default->flags & NETIF_FLAG_LINK_UP)){
+            printf("Conexão perdid, tentando reconectar");
+            gpio_put(LED_PIN, 0);
+            connectWifi();
+        }
+        sleep_ms(1000);
+
+    }
 }
 
 int main()
 {
-
+    stdio_init_all();
+    gpio_init(LED_PIN);
+    gpio_set_dir(LED_PIN, GPIO_OUT);
+    
+    if(cyw43_arch_init()){
+        printf("Erro ao iniciar o hardware wifi");
+    }
 }
