@@ -40,5 +40,12 @@ int main()
     
     if(cyw43_arch_init()){
         printf("Erro ao iniciar o hardware wifi");
+        return -1;
     }
+    cyw43_arch_enable_sta_mode();
+
+    connectWifi();
+    monitorwifi();
+
+    return 0;
 }
